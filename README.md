@@ -1,131 +1,92 @@
 # Weekly Sales Forecasting
 
-This project provides a framework for analyzing historical sales data and forecasting future weekly sales based on various factors including weather conditions, day of the week, and seasonality.
-
-## Project Overview
-
-The project uses March 2025 sales data along with weather information to:
-
-1. Analyze historical sales patterns
-2. Identify key factors influencing sales
-3. Build predictive models (Linear Regression, Random Forest, and Gradient Boosting)
-4. Generate weekly sales forecasts for April 2025
-
-## Data
-
-The project uses two main data sources:
-
-- `march_data_complete.csv`: Historical sales data for March 2025, including:
-  - Daily total sales
-  - Transaction counts
-  - Day of week information
-  - Weather conditions
-  - Store operating status (open/closed)
-  
-- `april_data.csv`: Weather forecast data for April 2025
+Sales forecasting system using machine learning to predict sales performance with historical data, weather patterns, and temporal features. Interactive Streamlit dashboard for data analysis, model training, and forecast visualization.
 
 ## Features
 
-- **Data Exploration**: Statistical analysis and visualization of historical sales data
-- **Correlation Analysis**: Identifying relationships between sales and various factors
-- **Feature Engineering**: Creating relevant features from date and weather data
-- **Model Training**: Linear Regression, Random Forest, and Gradient Boosting models for sales prediction
-- **Performance Evaluation**: Model accuracy metrics and feature importance analysis
-- **Sales Forecasting**: Daily and weekly forecasts for the upcoming month
-- **Visualization**: Interactive charts and graphs of historical and forecasted sales patterns
+- Multi-location support (4 Dutch retail locations)
+- Gradient Boosting and XGBoost algorithms
+- Weather data integration
+- Interactive Streamlit dashboard
+- Model persistence with versioning
+- Daily and weekly forecasting
+- Performance metrics (MAE, RMSE, R² score)
+- Data validation and preprocessing
 
-## Interactive Dashboard
+## Business Locations
+- **Fenix Food Factory B.V.** (50460) - 412 records
+- **Kaapse Will'ns B.V.** (47904) - 302 records  
+- **Kaapse Maria B.V.** (47903) - 365 records
+- **Kaapse Kaap B.V.** (47901) - 94 records
 
-The project includes a professional Streamlit dashboard that provides:
-
-- Interactive model selection (Linear Regression, Random Forest, Gradient Boosting)
-- Customizable feature selection for more accurate forecasting
-- Date range selection for targeted forecasts
-- Visual analysis of historical sales patterns
-- Detailed model performance metrics
-- Daily and weekly sales forecasts with visualizations
-- Key insights and business recommendations
-- Downloadable forecast data
-
-## Usage
-
-### Running the Dashboard Locally
-
-To run the interactive Streamlit dashboard locally:
+## Project Structure
 
 ```
-streamlit run streamlit_app.py
+weekly_sales_forecasting/
+├── streamlit_app.py          # Main dashboard (2,835 lines)
+├── sales_forecasting.py     # Core algorithms (234 lines)
+├── checks.py                 # Validation (170 lines)
+├── requirements.txt          # Dependencies
+├── Procfile                  # Deployment
+├── runtime.txt               # Python version
+├── .streamlit/config.toml    # App configuration
+├── data/                     # Data files
+│   ├── All_Locations_Combined.csv (477 records)
+│   ├── Fenix_Food_Factory_B.V._50460.csv (412 records)
+│   ├── Kaapse_Will'ns_B.V._47904.csv (302 records)
+│   ├── Kaapse_Maria_B.V._47903.csv (365 records)
+│   ├── Kaapse_Kaap_B.V._47901.csv (94 records)
+│   ├── Weather_May15_to_May27.csv
+│   ├── Weather_Kaapse_Kaap_47901.csv
+│   └── dataset details.pdf
+└── models/                   # Model storage
+    ├── model_combined_gradient_boosting_*.pkl
+    ├── model_combined_xgboost_*.pkl
+    └── Versioned with timestamp and feature hash
 ```
 
-### Running the Basic Script
 
-To run just the sales forecasting model without the dashboard:
+## Data Structure
 
-```
-python sales_forecasting.py
-```
+**Sales Data**
+- `Operational Date`, `Total_Sales`, `Sales_Count`, `Day_of_Week`
+- `Is_Weekend`, `Is_Public_Holiday`, `Is_Closed` 
+- `Tips_per_Transaction`, `Avg_Sale_per_Transaction`
+
+**Weather Data**
+- `tempmax/tempmin/temp`, `humidity`, `precip`, `precipprob`
+- `cloudcover`, `solarradiation`, `uvindex`
+
+## Machine Learning
+
+**Models**: Gradient Boosting, XGBoost  
+**Features**: Temporal, weather, sales patterns, location-specific  
+**Validation**: Cross-validation with MAE, RMSE, R² metrics  
+**Management**: Versioning, compression, caching, cleanup
+
+## Dashboard
+
+**Interface**: Company selection, date range, model configuration, feature selection  
+**Visualization**: Historical trends, forecasts, performance metrics, feature importance  
+**Analytics**: Time series charts, model comparison, downloadable reports
+
+## Technical Stack
+
+**Framework**: Streamlit  
+**ML**: scikit-learn, XGBoost  
+**Data**: pandas, NumPy  
+**Visualization**: Plotly, Matplotlib, Seaborn  
+**Storage**: joblib, compressed models with metadata
+
+## File Details
+
+**streamlit_app.py** - Main dashboard with caching, data management, feature engineering, model training, forecasting, and visualization
+
+**sales_forecasting.py** - Statistical analysis, model training (Linear Regression, Random Forest), evaluation, and feature analysis
+
+**checks.py** - Validation system for dependencies, data integrity, configuration, and deployment testing
 
 ## Deployment
 
-This application is ready for deployment to various Streamlit hosting platforms.
-
-### Pre-Deployment Checks
-
-Run the checks script to validate your environment before deployment:
-
-```
-python checks.py
-```
-
-### Deploying to Streamlit Cloud
-
-1. Sign up for [Streamlit Cloud](https://streamlit.io/cloud)
-2. Link your GitHub repository
-3. Select the repository and the main file (`streamlit_app.py`)
-4. Configure your app settings
-5. Deploy
-
-### Deploying to Heroku
-
-1. Create a Heroku account and install the Heroku CLI
-2. Log in to Heroku and create a new app
-3. Push your code to Heroku:
-
-```bash
-git init
-git add .
-git commit -m "Initial commit"
-heroku git:remote -a your-app-name
-git push heroku main
-```
-
-### Deploying to Other Platforms
-
-The application includes all necessary files for deployment to:
-- [Railway](https://railway.app/)
-- [Render](https://render.com/)
-- [AWS Elastic Beanstalk](https://aws.amazon.com/elasticbeanstalk/)
-- [Google Cloud Run](https://cloud.google.com/run)
-
-## Requirements
-
-- Python 3.9+
-- pandas
-- numpy
-- scikit-learn
-- matplotlib
-- seaborn
-- streamlit
-- plotly
-- joblib
-- statsmodels
-- scipy
-
-## Future Improvements
-
-- Add more sophisticated time series models (ARIMA, Prophet)
-- Incorporate more historical data for improved seasonality detection
-- Implement anomaly detection for unusual sales patterns
-- Add confidence intervals for predictions
-- Account for special events and promotions
-- Incorporate inventory data for supply chain optimization 
+Ready for: Streamlit Cloud, Heroku, Railway, Render, AWS/GCP/Azure  
+Files: `Procfile`, `runtime.txt`, `requirements.txt`, `.streamlit/config.toml` 
